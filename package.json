@@ -1,0 +1,43 @@
+{
+  "name": "lemdata",
+  "version": "1.0.0",
+  "description": "Lemdata - מערכת חינוכית חכמה עם AI היברידי",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "setup": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "db:generate": "cd backend && npm run db:generate",
+    "db:push": "cd backend && npm run db:push",
+    "db:studio": "cd backend && npm run db:studio",
+    "db:seed": "cd backend && npm run db:seed",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint"
+  },
+  "keywords": [
+    "education",
+    "ai",
+    "hybrid-ai",
+    "learning-platform",
+    "ocr",
+    "hebrew"
+  ],
+  "author": "Lemdata Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
+

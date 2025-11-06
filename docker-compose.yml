@@ -1,0 +1,68 @@
+services:
+  # Using existing PostgreSQL and Redis - commenting out
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: lemdata-postgres
+  #   environment:
+  #     POSTGRES_USER: lemdata
+  #     POSTGRES_PASSWORD: lemdata123456
+  #     POSTGRES_DB: lemdata
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U lemdata"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: lemdata-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: lemdata-minio
+    environment:
+      MINIO_ROOT_USER: lemdata
+      MINIO_ROOT_PASSWORD: lemdata123456
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: lemdata-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@lemdata.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  pgadmin_data:
+
