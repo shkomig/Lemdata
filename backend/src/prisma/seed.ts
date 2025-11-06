@@ -1,7 +1,15 @@
-import { PrismaClient, UserRole } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
+
+// Define UserRole enum locally as fallback
+enum UserRole {
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+  PARENT = 'PARENT',
+  ADMIN = 'ADMIN',
+}
 
 async function main() {
   console.log('🌱 Starting seed...')
@@ -15,7 +23,7 @@ async function main() {
       email: 'admin@lemdata.com',
       password: adminPassword,
       name: 'מנהל מערכת',
-      role: UserRole.ADMIN,
+      role: 'ADMIN' as any,
     },
   })
   console.log('✅ Created admin user:', admin.email)
@@ -29,7 +37,7 @@ async function main() {
       email: 'teacher@lemdata.com',
       password: teacherPassword,
       name: 'מורה דוגמה',
-      role: UserRole.TEACHER,
+      role: 'TEACHER' as any,
     },
   })
   console.log('✅ Created teacher user:', teacher.email)
@@ -43,7 +51,7 @@ async function main() {
       email: 'student@lemdata.com',
       password: studentPassword,
       name: 'תלמיד דוגמה',
-      role: UserRole.STUDENT,
+      role: 'STUDENT' as any,
     },
   })
   console.log('✅ Created student user:', student.email)

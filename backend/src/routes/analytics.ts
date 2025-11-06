@@ -47,12 +47,12 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
 
       // Calculate totals
       const totals = {
-        totalQuestions: historyAnalytics.reduce((sum, a) => sum + a.questionsAsked, 0),
-        totalCost: historyAnalytics.reduce((sum, a) => sum + a.aiCostTotal, 0),
-        totalImages: historyAnalytics.reduce((sum, a) => sum + a.imagesUploaded, 0),
-        geminiQueries: historyAnalytics.reduce((sum, a) => sum + a.aiQueriesGemini, 0),
-        huggingQueries: historyAnalytics.reduce((sum, a) => sum + a.aiQueriesHugging, 0),
-        localQueries: historyAnalytics.reduce((sum, a) => sum + a.aiQueriesLocal, 0),
+        totalQuestions: historyAnalytics.reduce((sum: number, a: any) => sum + a.questionsAsked, 0),
+        totalCost: historyAnalytics.reduce((sum: number, a: any) => sum + a.aiCostTotal, 0),
+        totalImages: historyAnalytics.reduce((sum: number, a: any) => sum + a.imagesUploaded, 0),
+        geminiQueries: historyAnalytics.reduce((sum: number, a: any) => sum + a.aiQueriesGemini, 0),
+        huggingQueries: historyAnalytics.reduce((sum: number, a: any) => sum + a.aiQueriesHugging, 0),
+        localQueries: historyAnalytics.reduce((sum: number, a: any) => sum + a.aiQueriesLocal, 0),
       }
 
       return reply.send({
@@ -96,10 +96,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
 
       const stats = {
         totalConversations: conversations.length,
-        totalMessages: conversations.reduce((sum, c) => sum + c._count.messages, 0),
+        totalMessages: conversations.reduce((sum: number, c: any) => sum + c._count.messages, 0),
         averageMessagesPerConversation:
           conversations.length > 0
-            ? conversations.reduce((sum, c) => sum + c._count.messages, 0) / conversations.length
+            ? conversations.reduce((sum: number, c: any) => sum + c._count.messages, 0) / conversations.length
             : 0,
       }
 
