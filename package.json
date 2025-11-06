@@ -33,7 +33,7 @@
   "author": "Lemdata Team",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^9.1.2"
   },
   "engines": {
     "node": ">=18.0.0",

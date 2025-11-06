@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
-import { UserRole } from '@prisma/client'
 import { prisma } from '../config/database'
+
+// Define UserRole type locally as fallback
+type UserRole = 'STUDENT' | 'TEACHER' | 'PARENT' | 'ADMIN'
 
 export interface RegisterData {
   email: string
@@ -44,7 +46,7 @@ export class AuthService {
         email: data.email,
         password: hashedPassword,
         name: data.name,
-        role: data.role || UserRole.STUDENT,
+        role: data.role || 'STUDENT',
       },
       select: {
         id: true,

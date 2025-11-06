@@ -1,34 +1,35 @@
 services:
-  # Using existing PostgreSQL and Redis - commenting out
-  # postgres:
-  #   image: postgres:15-alpine
-  #   container_name: lemdata-postgres
-  #   environment:
-  #     POSTGRES_USER: lemdata
-  #     POSTGRES_PASSWORD: lemdata123456
-  #     POSTGRES_DB: lemdata
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U lemdata"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  postgres:
+    image: postgres:15-alpine
+    container_name: lemdata-postgres
+    environment:
+      POSTGRES_USER: lemdata
+      POSTGRES_PASSWORD: lemdata123456
+      POSTGRES_DB: lemdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lemdata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: lemdata-redis
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: lemdata-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   minio:
     image: minio/minio:latest
@@ -47,6 +48,7 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -59,6 +61,9 @@ services:
       - "8080:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
 volumes:
   postgres_data:

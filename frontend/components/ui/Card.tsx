@@ -5,6 +5,10 @@ interface CardProps {
   className?: string
   onClick?: () => void
   hover?: boolean
+  onDragEnter?: (e: React.DragEvent) => void
+  onDragOver?: (e: React.DragEvent) => void
+  onDragLeave?: (e: React.DragEvent) => void
+  onDrop?: (e: React.DragEvent) => void
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -12,6 +16,10 @@ export const Card: React.FC<CardProps> = ({
   className = '',
   onClick,
   hover = false,
+  onDragEnter,
+  onDragOver,
+  onDragLeave,
+  onDrop,
 }) => {
   return (
     <div
@@ -22,6 +30,10 @@ export const Card: React.FC<CardProps> = ({
         ${className}
       `}
       onClick={onClick}
+      onDragEnter={onDragEnter}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
     >
       {children}
     </div>

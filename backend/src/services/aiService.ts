@@ -290,7 +290,7 @@ export class AIService {
         throw new Error(`Ollama API error: ${response.statusText}`)
       }
 
-      const data = await response.json()
+      const data = await response.json() as { response?: string }
       const processingTime = Date.now() - startTime
 
       return {
