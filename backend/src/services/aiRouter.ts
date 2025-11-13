@@ -1,4 +1,4 @@
-import { prisma } from '../config/database'
+import { db } from './database'
 import { logger } from '../utils/logger'
 
 export type AIModel = 'gemini' | 'huggingface' | 'ollama'
@@ -101,6 +101,7 @@ export class AIRouter {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
+      const prisma = db.getPrisma()
       const analytics = await prisma.userAnalytics.findFirst({
         where: {
           userId,
@@ -125,6 +126,7 @@ export class AIRouter {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
+      const prisma = db.getPrisma()
       const analytics = await prisma.userAnalytics.findFirst({
         where: {
           userId,

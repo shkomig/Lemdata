@@ -1,6 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { AIService } from '../services/aiService'
+import { db } from '../services/database'
+import { sanitizeString, checkMaxLength, checkProhibitedContent } from '../utils/sanitizer'
+import { BadRequestError, NotFoundError } from '../utils/errors'
 
 const chatSchema = z.object({
   message: z.string().min(1).max(5000),
@@ -52,10 +55,23 @@ export async function chatRoutes(fastify: FastifyInstance) {
         const user = (request as any).user
         const body = chatSchema.parse(request.body)
 
+        // Sanitize and validate message
+        const sanitizedMessage = sanitizeString(body.message)
+        checkMaxLength(sanitizedMessage, 5000, 'Message')
+        
+        // Check for prohibited content
+        const contentCheck = checkProhibitedContent(sanitizedMessage)
+        if (!contentCheck.safe) {
+          throw new BadRequestError(contentCheck.reason || 'Message contains prohibited content', {
+            details: { message: sanitizedMessage.substring(0, 100) },
+            path: request.url,
+          })
+        }
+
         // Get conversation history if conversationId exists
         let history: Array<{ role: 'user' | 'assistant'; content: string }> = []
         if (body.conversationId) {
-          const { prisma } = await import('../server')
+          const prisma = db.getPrisma()
           const messages = await prisma.message.findMany({
             where: { conversationId: body.conversationId },
             orderBy: { createdAt: 'asc' },
@@ -69,7 +85,7 @@ export async function chatRoutes(fastify: FastifyInstance) {
         }
 
         const response = await aiService.generateResponse({
-          message: body.message,
+          message: sanitizedMessage,
           conversationId: body.conversationId,
           userId: user.userId,
           history,
@@ -104,7 +120,7 @@ export async function chatRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const user = (request as any).user
 
-      const { prisma } = await import('../server')
+      const prisma = db.getPrisma()
       const conversations = await prisma.conversation.findMany({
         where: { userId: user.userId },
         orderBy: { updatedAt: 'desc' },
@@ -141,7 +157,7 @@ export async function chatRoutes(fastify: FastifyInstance) {
       const user = (request as any).user
       const conversationId = (request.params as any).conversationId
 
-      const { prisma } = await import('../server')
+      const prisma = db.getPrisma()
       const conversation = await prisma.conversation.findFirst({
         where: {
           id: conversationId,
@@ -150,8 +166,10 @@ export async function chatRoutes(fastify: FastifyInstance) {
       })
 
       if (!conversation) {
-        return reply.code(404).send({
-          error: 'Conversation not found',
+        throw new NotFoundError('Conversation not found', {
+          details: { conversationId },
+          userId: user.userId,
+          path: request.url,
         })
       }
 

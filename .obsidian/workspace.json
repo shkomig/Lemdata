@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "17d1a8d1ffa32a37",
+    "type": "split",
+    "children": [
+      {
+        "id": "c49a5382a3046d70",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d916c80afd389a97",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "תצוגת גרף"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "025acffa23e05791",
+    "type": "split",
+    "children": [
+      {
+        "id": "64b31424755c6ec0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d2d84a7c498976ce",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "סייר קבצים"
+            }
+          },
+          {
+            "id": "b93fff6c97d4838e",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "לחפש"
+            }
+          },
+          {
+            "id": "acb93544971ccb61",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "סימניות"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "61932d03dde7ad64",
+    "type": "split",
+    "children": [
+      {
+        "id": "c158e7203a3fc1fc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "81917a874caca35d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "קישורים נכנסים"
+            }
+          },
+          {
+            "id": "dea53fecb9ae8110",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "קישורים יוצאים"
+            }
+          },
+          {
+            "id": "0515e05d08acd399",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "תגים"
+            }
+          },
+          {
+            "id": "3cd4ae885e8f4f8c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "מתווה"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:פתח את המחליף המהיר": false,
+      "graph:פתח תצוגת גרף": false,
+      "canvas:צור קנבס חדש": false,
+      "daily-notes:פתח את ההערה של היום": false,
+      "templates:הכנס תבנית": false,
+      "command-palette:פתח את לוח הפקודות": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "d916c80afd389a97",
+  "lastOpenFiles": [
+    "frontend/node_modules/tailwindcss/loadConfig.js",
+    "frontend/node_modules/tailwindcss/resolveConfig.js",
+    "FIXES_DOCUMENTATION.md",
+    "frontend/node_modules/@types/react-dom/static.node.d.ts",
+    "frontend/node_modules/@types/react-dom/static.edge.d.ts",
+    "frontend/node_modules/@types/react-dom/static.browser.d.ts",
+    "frontend/node_modules/@types/react-dom/server.node.d.ts",
+    "frontend/node_modules/@types/react-dom/server.edge.d.ts",
+    "frontend/node_modules/@types/react-dom/server.bun.d.ts",
+    "frontend/node_modules/@types/react-dom/server.browser.d.ts",
+    "frontend/node_modules/@types/json5/index.d.ts",
+    "frontend/node_modules/@types/json-schema/index.d.ts",
+    "CRASH_TROUBLESHOOTING.md",
+    "BACKEND_STATUS.md",
+    "frontend/node_modules/tailwindcss/lib/postcss-plugins/nesting/README.md",
+    "frontend/node_modules/punycode/README.md",
+    "frontend/node_modules/prop-types/README.md",
+    "frontend/node_modules/path-parse/README.md",
+    "frontend/node_modules/path-key/readme.md",
+    "frontend/node_modules/path-exists/readme.md",
+    "frontend/node_modules/parent-module/readme.md",
+    "frontend/node_modules/p-locate/readme.md",
+    "frontend/node_modules/own-keys/README.md",
+    "frontend/node_modules/own-keys/CHANGELOG.md",
+    "frontend/node_modules/optionator/README.md",
+    "frontend/node_modules/optionator/CHANGELOG.md",
+    "frontend/node_modules/object.groupby/README.md",
+    "frontend/node_modules/object.groupby/CHANGELOG.md",
+    "SYSTEM_STATUS_20251112.md",
+    "frontend/node_modules/postcss-value-parser/README.md",
+    "frontend/node_modules/queue-microtask/README.md",
+    "PORT_CHANGE_SUMMARY.md",
+    "RUNNING_GUIDE.md",
+    "backend/node_modules/prisma/build/public/assets/tick.8cbb6a93.svg",
+    "backend/node_modules/prisma/build/public/assets/tick-indeterminate.aec8a44d.svg",
+    "backend/node_modules/prisma/build/public/assets/sun.89774753.svg",
+    "backend/node_modules/prisma/build/public/assets/string.ea615a24.svg",
+    "backend/node_modules/prisma/build/public/assets/settings.5ad25af2.svg",
+    "backend/node_modules/prisma/build/public/assets/search.2ed766ce.svg",
+    "backend/node_modules/prisma/build/public/assets/refresh.d5448ccc.svg",
+    "backend/node_modules/prisma/build/public/assets/plus.8fbf7ad3.svg",
+    "backend/node_modules/prisma/build/public/assets/play.8811691e.svg",
+    "backend/node_modules/prisma/build/public/assets/panel-left.a81e4b97.svg",
+    "backend/node_modules/bcryptjs/src/bcrypt/prng/README.md",
+    "backend/node_modules/wrap-ansi-cjs/node_modules/strip-ansi/readme.md",
+    "backend/node_modules/wrap-ansi-cjs/node_modules/string-width/readme.md"
+  ]
+}

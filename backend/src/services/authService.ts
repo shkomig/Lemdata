@@ -63,26 +63,39 @@ export class AuthService {
   }
 
   async login(data: LoginData): Promise<UserWithoutPassword | null> {
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email: data.email },
-    })
+    try {
+      console.log('Login attempt for email:', data.email)
+      
+      // Find user
+      const user = await prisma.user.findUnique({
+        where: { email: data.email },
+      })
 
-    if (!user) {
-      return null
+      if (!user) {
+        console.log('User not found:', data.email)
+        return null
+      }
+
+      console.log('User found, verifying password...')
+      
+      // Verify password
+      const isValid = await bcrypt.compare(data.password, user.password)
+
+      if (!isValid) {
+        console.log('Invalid password for user:', data.email)
+        return null
+      }
+
+      console.log('Login successful for user:', data.email)
+      
+      // Return user without password
+      const { password: _, ...userWithoutPassword } = user
+      // Remove password from type
+      return userWithoutPassword as UserWithoutPassword
+    } catch (error) {
+      console.error('Login service error:', error)
+      throw error
     }
-
-    // Verify password
-    const isValid = await bcrypt.compare(data.password, user.password)
-
-    if (!isValid) {
-      return null
-    }
-
-    // Return user without password
-    const { password: _, ...userWithoutPassword } = user
-    // Remove password from type
-    return userWithoutPassword as UserWithoutPassword
   }
 
   async getUserById(id: string): Promise<UserWithoutPassword | null> {

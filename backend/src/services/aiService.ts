@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { config } from '../config/config'
 import { AIRouter, AIModel } from './aiRouter'
-import { prisma } from '../config/database'
+import { db } from './database'
 import { logger } from '../utils/logger'
 
 export interface ChatMessage {
@@ -79,6 +79,7 @@ export class AIService {
       }
 
       // Get or create conversation
+      const prisma = db.getPrisma()
       const conversation = conversationId
         ? await prisma.conversation.findUnique({ where: { id: conversationId } })
         : await prisma.conversation.create({
@@ -132,6 +133,7 @@ export class AIService {
         try {
           const fallbackResponse = await this.generateGeminiResponse(message, history)
           // Get or create conversation for fallback
+          const prisma = db.getPrisma()
           const conversation = conversationId
             ? await prisma.conversation.findUnique({ where: { id: conversationId } })
             : await prisma.conversation.create({
@@ -379,6 +381,7 @@ export class AIService {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
+      const prisma = db.getPrisma()
       await prisma.userAnalytics.upsert({
         where: {
           userId_date: {

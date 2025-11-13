@@ -4,6 +4,8 @@ import jwt from '@fastify/jwt'
 import rateLimit from '@fastify/rate-limit'
 import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
+import cookie from '@fastify/cookie'
+import csrf from '@fastify/csrf-protection'
 import { config } from '../config/config'
 import { authenticate } from '../middleware/auth'
 
@@ -14,24 +16,27 @@ export async function setupPlugins(fastify: FastifyInstance) {
     credentials: true,
   })
 
+  // Cookie support (required for CSRF)
+  await fastify.register(cookie, {
+    secret: config.jwt.secret,
+  })
+
+  // CSRF Protection
+  await fastify.register(csrf, {
+    cookieOpts: {
+      httpOnly: true,
+      sameSite: 'strict',
+      signed: true,
+      secure: config.server.env === 'production',
+    },
+  })
+
   // JWT
   await fastify.register(jwt, {
     secret: config.jwt.secret,
     sign: {
       expiresIn: config.jwt.expiresIn,
     },
-  })
-
-  // Add JWT verify decorator
-  fastify.decorate('authenticate', async function (request: any, reply: any) {
-    try {
-      await request.jwtVerify()
-    } catch (err) {
-      reply.code(401).send({
-        error: 'Unauthorized',
-        message: 'Invalid or expired token',
-      })
-    }
   })
 
   // Rate Limiting
