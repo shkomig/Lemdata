@@ -75,3 +75,6 @@ netstat -ano | findstr ":3001"
 
 אם יש משהו, הרג אותו או שנה את ה-PORT ב-`backend/.env`.
 
+
+
+

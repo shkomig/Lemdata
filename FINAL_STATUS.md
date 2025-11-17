@@ -74,3 +74,6 @@ docker exec postgres-db psql -U admin -d lemdata -c "SELECT email, name, role FR
 
 **הכל מוכן! רק צריך להפעיל Backend** 🚀
 
+
+
+

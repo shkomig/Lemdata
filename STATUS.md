@@ -61,3 +61,6 @@ GEMINI_API_KEY=your-api-key-here
 
 **המערכת מוכנה! רק צריך להריץ db:push ו-db:seed** 🚀
 
+
+
+
