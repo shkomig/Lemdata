@@ -33,6 +33,70 @@ api.interceptors.response.use(
 
 export default api
 
+// Game API functions
+export const gameAPI = {
+  /**
+   * יוצר משחק חדש מתמונה או טקסט
+   */
+  generateGame: async (data: {
+    imageId?: string
+    sourceText?: string
+    gameType?: string
+    difficulty?: string
+    title?: string
+  }) => {
+    const response = await api.post('/api/games/generate', data)
+    return response.data
+  },
+
+  /**
+   * מחזיר את כל המשחקים של המשתמש
+   */
+  getGames: async () => {
+    const response = await api.get('/api/games')
+    return response.data
+  },
+
+  /**
+   * מחזיר משחק ספציפי
+   */
+  getGame: async (gameId: string) => {
+    const response = await api.get(`/api/games/${gameId}`)
+    return response.data
+  },
+
+  /**
+   * שולח תשובות ומקבל הערכה
+   */
+  submitAnswers: async (
+    gameId: string,
+    data: {
+      sessionId?: string
+      answers: any
+      timeSpent?: number
+    }
+  ) => {
+    const response = await api.post(`/api/games/${gameId}/play`, data)
+    return response.data
+  },
+
+  /**
+   * מוחק משחק
+   */
+  deleteGame: async (gameId: string) => {
+    const response = await api.delete(`/api/games/${gameId}`)
+    return response.data
+  },
+
+  /**
+   * מחזיר את כל ה-sessions של משחק
+   */
+  getGameSessions: async (gameId: string) => {
+    const response = await api.get(`/api/games/${gameId}/sessions`)
+    return response.data
+  },
+}
+
 
 
 

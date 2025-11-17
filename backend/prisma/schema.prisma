@@ -18,6 +18,19 @@ enum UserRole {
   ADMIN
 }
 
+enum GameType {
+  FILL_IN_BLANKS    // השלמת משפטים
+  MATCHING          // התאמות
+  MULTIPLE_CHOICE   // בחירה מרובה
+  WORD_ORDER        // סידור מילים
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -32,6 +45,9 @@ model User {
   conversations Conversation[]
   messages      Message[]
   images        Image[]
+  games         Game[]
+  gameSessions  GameSession[]
+  analytics     UserAnalytics[]
 
   @@index([email])
   @@index([role])
@@ -83,8 +99,79 @@ model Image {
   analysis    Json?
   createdAt   DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  games Game[]
 
   @@index([userId])
+}
+
+model Game {
+  id             String          @id @default(uuid())
+  userId         String
+  imageId        String?         // התמונה ממנה נוצר המשחק
+  title          String
+  description    String?
+  type           GameType
+  difficulty     DifficultyLevel @default(MEDIUM)
+  content        Json            // תוכן המשחק (שאלות, תשובות, וכו')
+  sourceText     String?         // הטקסט ממנו נוצר המשחק
+  aiModel        String?         // המודל שיצר את המשחק
+  metadata       Json?           // מטא דאטה נוספת
+  isPublic       Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  image        Image?        @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  gameSessions GameSession[]
+
+  @@index([userId])
+  @@index([imageId])
+  @@index([type])
+  @@index([difficulty])
+  @@index([isPublic])
+}
+
+model GameSession {
+  id          String   @id @default(uuid())
+  userId      String
+  gameId      String
+  score       Int      @default(0)
+  maxScore    Int      // הציון המקסימלי האפשרי
+  completed   Boolean  @default(false)
+  timeSpent   Int?     // זמן במילישניות
+  answers     Json?    // תשובות המשתמש
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([gameId])
+  @@index([completed])
+  @@index([userId, gameId]) // למציאת הסשנים של משתמש במשחק מסוים
+}
+
+model UserAnalytics {
+  id                String   @id @default(uuid())
+  userId            String
+  date              DateTime @db.Date
+  questionsAsked    Int      @default(0)
+  aiCostTotal       Float    @default(0)
+  aiQueriesGemini   Int      @default(0)
+  aiQueriesHugging  Int      @default(0)
+  aiQueriesLocal    Int      @default(0)
+  imagesUploaded    Int      @default(0)
+  gamesCreated      Int      @default(0)
+  gamesPlayed       Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date])
 }
 

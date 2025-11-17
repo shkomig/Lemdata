@@ -59,8 +59,93 @@ export interface UserAnalytics {
   aiQueriesHugging: number
   aiQueriesLocal: number
   imagesUploaded: number
+  gamesCreated: number
+  gamesPlayed: number
   createdAt: string
   updatedAt: string
+}
+
+// Game Types
+export enum GameType {
+  FILL_IN_BLANKS = 'FILL_IN_BLANKS',    // השלמת משפטים
+  MATCHING = 'MATCHING',                 // התאמות
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',   // בחירה מרובה
+  WORD_ORDER = 'WORD_ORDER',             // סידור מילים
+}
+
+export enum DifficultyLevel {
+  EASY = 'EASY',
+  MEDIUM = 'MEDIUM',
+  HARD = 'HARD',
+}
+
+// Game Content Types for each game type
+export interface FillInBlanksContent {
+  sentences: {
+    text: string           // המשפט עם ____ במקום החסר
+    answer: string         // התשובה הנכונה
+    options?: string[]     // אופציות לבחירה (אופציונלי)
+  }[]
+}
+
+export interface MatchingContent {
+  pairs: {
+    left: string          // פריט משמאל
+    right: string         // פריט מימין
+    id: string            // מזהה ייחודי
+  }[]
+}
+
+export interface MultipleChoiceContent {
+  questions: {
+    question: string      // השאלה
+    options: string[]     // אפשרויות תשובה
+    correctAnswer: number // אינדקס של התשובה הנכונה
+    explanation?: string  // הסבר (אופציונלי)
+  }[]
+}
+
+export interface WordOrderContent {
+  sentences: {
+    correctOrder: string[]  // סדר נכון של המילים
+    hint?: string          // רמז (אופציונלי)
+  }[]
+}
+
+export type GameContent =
+  | FillInBlanksContent
+  | MatchingContent
+  | MultipleChoiceContent
+  | WordOrderContent
+
+export interface Game {
+  id: string
+  userId: string
+  imageId?: string
+  title: string
+  description?: string
+  type: GameType
+  difficulty: DifficultyLevel
+  content: GameContent
+  sourceText?: string
+  aiModel?: string
+  metadata?: any
+  isPublic: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface GameSession {
+  id: string
+  userId: string
+  gameId: string
+  score: number
+  maxScore: number
+  completed: boolean
+  timeSpent?: number
+  answers?: any
+  startedAt: string
+  completedAt?: string
 }
 
 // API Request/Response types
@@ -93,6 +178,38 @@ export interface ChatResponse {
   message: Message
   conversationId: string
   suggestions?: string[]
+}
+
+// Game API Request/Response types
+export interface GenerateGameRequest {
+  imageId?: string         // אופציונלי - אם רוצים ליצור משחק מתמונה קיימת
+  sourceText?: string      // אופציונלי - אם רוצים ליצור משחק מטקסט ישירות
+  gameType?: GameType      // אופציונלי - סוג משחק ספציפי, אחרת אוטומטי
+  difficulty?: DifficultyLevel
+  title?: string
+}
+
+export interface GenerateGameResponse {
+  game: Game
+  cost: number
+  model: string
+}
+
+export interface SubmitGameAnswersRequest {
+  gameId: string
+  sessionId?: string
+  answers: any
+  timeSpent?: number
+}
+
+export interface SubmitGameAnswersResponse {
+  session: GameSession
+  feedback: {
+    correct: number
+    incorrect: number
+    percentage: number
+    details?: any
+  }
 }
 
 
