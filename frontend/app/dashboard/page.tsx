@@ -49,6 +49,13 @@ export default function DashboardPage() {
       icon: '📸',
     },
     {
+      title: '🎮 משחקים אינטרקטיביים',
+      description: 'צור משחקים חינוכיים מתמונות',
+      href: '/dashboard/games',
+      color: 'bg-pink-500',
+      icon: '🎮',
+    },
+    {
       title: '📊 התקדמות',
       description: 'צפה בהתקדמות שלך',
       href: '/dashboard/analytics',

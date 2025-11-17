@@ -3,6 +3,7 @@ import { authRoutes } from './auth'
 import { chatRoutes } from './chat'
 import { imageRoutes } from './images'
 import { analyticsRoutes } from './analytics'
+import gameRoutes from './games.js'
 
 export async function setupRoutes(fastify: FastifyInstance) {
   // Health check
@@ -19,5 +20,6 @@ export async function setupRoutes(fastify: FastifyInstance) {
   await fastify.register(chatRoutes, { prefix: '/api/chat' })
   await fastify.register(imageRoutes, { prefix: '/api/images' })
   await fastify.register(analyticsRoutes, { prefix: '/api/analytics' })
+  await fastify.register(gameRoutes, { prefix: '/api/games' })
 }
 

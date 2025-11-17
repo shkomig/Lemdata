@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useRef, DragEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
-import api from '@/lib/api'
+import api, { gameAPI } from '@/lib/api'
 import toast from 'react-hot-toast'
 
 interface ImageAnalysis {
@@ -25,10 +26,13 @@ interface UploadedImage {
 }
 
 export const ImageUpload = () => {
+  const router = useRouter()
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
   const [analysis, setAnalysis] = useState<ImageAnalysis | null>(null)
+  const [latestImageId, setLatestImageId] = useState<string | null>(null)
+  const [isGeneratingGame, setIsGeneratingGame] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleDragEnter = (e: DragEvent) => {
@@ -99,11 +103,31 @@ export const ImageUpload = () => {
 
       setUploadedImages((prev) => [response.data.image, ...prev])
       setAnalysis(response.data.analysis)
+      setLatestImageId(response.data.image.id)
       toast.success('התמונה הועלתה ונבדקה בהצלחה!')
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'שגיאה בהעלאת התמונה')
     } finally {
       setIsUploading(false)
+    }
+  }
+
+  const handleGenerateGame = async (imageId: string) => {
+    setIsGeneratingGame(true)
+    const loadingToast = toast.loading('יוצר משחק אינטרקטיבי...')
+
+    try {
+      const response = await gameAPI.generateGame({ imageId })
+      toast.success('המשחק נוצר בהצלחה!', { id: loadingToast })
+      router.push(`/dashboard/games/${response.game.id}`)
+    } catch (error: any) {
+      console.error('Error generating game:', error)
+      toast.error(
+        error.response?.data?.error || 'שגיאה ביצירת המשחק',
+        { id: loadingToast }
+      )
+    } finally {
+      setIsGeneratingGame(false)
     }
   }
 
@@ -137,7 +161,7 @@ export const ImageUpload = () => {
       </Card>
 
       {/* Analysis Results */}
-      {analysis && (
+      {analysis && latestImageId && (
         <Card>
           <h3 className="text-xl font-bold mb-4">תוצאות ניתוח:</h3>
           <div className="space-y-3">
@@ -176,6 +200,20 @@ export const ImageUpload = () => {
                 </span>
               </div>
             )}
+
+            {/* כפתור יצירת משחק */}
+            <div className="pt-4 border-t">
+              <Button
+                onClick={() => handleGenerateGame(latestImageId)}
+                disabled={isGeneratingGame}
+                className="w-full bg-green-600 hover:bg-green-700"
+              >
+                {isGeneratingGame ? 'יוצר משחק...' : '🎮 צור משחק אינטרקטיבי מהתמונה'}
+              </Button>
+              <p className="text-xs text-gray-500 text-center mt-2">
+                המערכת תיצור משחק חינוכי אוטומטית על בסיס התוכן שזוהה
+              </p>
+            </div>
           </div>
         </Card>
       )}
@@ -186,16 +224,24 @@ export const ImageUpload = () => {
           <h3 className="text-xl font-bold mb-4">תמונות שהועלו:</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {uploadedImages.map((image) => (
-              <Card key={image.id}>
+              <Card key={image.id} className="p-4">
                 <img
                   src={image.url}
                   alt={image.originalName}
                   className="w-full h-48 object-cover rounded-lg mb-2"
                 />
-                <p className="text-sm text-gray-600 truncate">{image.originalName}</p>
+                <p className="text-sm text-gray-600 truncate mb-2">{image.originalName}</p>
                 {image.ocrText && (
-                  <p className="text-xs text-gray-500 mt-2 line-clamp-2">{image.ocrText}</p>
+                  <p className="text-xs text-gray-500 mb-3 line-clamp-2">{image.ocrText}</p>
                 )}
+                <Button
+                  onClick={() => handleGenerateGame(image.id)}
+                  disabled={isGeneratingGame}
+                  size="sm"
+                  className="w-full"
+                >
+                  צור משחק
+                </Button>
               </Card>
             ))}
           </div>
